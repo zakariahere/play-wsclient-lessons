@@ -1,9 +1,4 @@
-# Routes
-# This file defines all application routes (Higher priority routes first)
-# https://www.playframework.com/documentation/latest/ScalaRouting
-# ~~~~
-# The routes file is compiled. Every controller mentioned here must be wired
-# into AppComponents (app/wiring/AppLoader.scala) or it won't compile.
-
 GET     /                           controllers.HomeController.index()
-#GET     /blog/:id                  controllers.BlogController.findBlog(id: String)
+GET     /ws/hello                      controllers.WsLessonController.hello()
+GET     /ws/todos/:id                  controllers.WsLessonController.todo(id: Int)
+GET     /ws/user/:userId/todos          controllers.WsLessonController.todosForUser(userId: Int)
