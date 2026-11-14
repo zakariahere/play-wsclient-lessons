@@ -2,3 +2,8 @@ GET     /                           controllers.HomeController.index()
 GET     /ws/hello                      controllers.WsLessonController.hello()
 GET     /ws/todos/:id                  controllers.WsLessonController.todo(id: Int)
 GET     /ws/user/:userId/todos          controllers.WsLessonController.todosForUser(userId: Int)
+
+GET     /json/as/:id                 controllers.WsJsonController.todoAs(id: Int)
+GET     /json/todo/:id               controllers.WsJsonController.todoValidate(id: Int)
+GET     /json/user/:userId/stats     controllers.WsJsonController.userStats(userId: Int)
+GET     /json/user/:id               controllers.WsJsonController.userSummary(id: Int)

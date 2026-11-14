@@ -34,20 +34,20 @@ class WsLessonController @Inject()(ws: WSClient,
     ws.url(s"$baseUrl/todos/$id").addHttpHeaders("Accept" -> "application/json")
       .withRequestTimeout(5.seconds)
       .get().map {
-        response => response.status match {
-          case OK => Ok(response.json)
-          case NOT_FOUND => NotFound(s"No todo with id $id")
-          case other => BadGateway(s"Upstream said $other : ${response.body}")
-        }
+        response =>
+          response.status match {
+            case OK => Ok(response.json)
+            case NOT_FOUND => NotFound(s"No todo with id $id")
+            case other => BadGateway(s"Upstream said $other : ${response.body}")
+          }
       }
   }
 
 
-  def todosForUser(userId: Int) : Action[AnyContent]  = Action.async{
+  def todosForUser(userId: Int): Action[AnyContent] = Action.async {
     ws.url(s"$baseUrl/todos").addQueryStringParameters(
       "userId" -> userId.toString,
       "completed" -> "true"
-    ).get().map( response => Ok(response.json))
+    ).get().map(response => Ok(response.json))
   }
-
 }
