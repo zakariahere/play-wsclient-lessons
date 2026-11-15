@@ -13,3 +13,12 @@ PUT     /write/posts/:id             controllers.WsWriteController.replacePost(i
 PATCH   /write/posts/:id/title       controllers.WsWriteController.patchTitle(id: Int)
 DELETE  /write/posts/:id             controllers.WsWriteController.deletePost(id: Int)
 POST    /write/form                  controllers.WsWriteController.formDemo()
+
+GET     /errors/todo/:id             controllers.WsErrorController.todo(id: Int)
+GET     /errors/slow                 controllers.WsErrorController.slow()
+GET     /errors/nohost               controllers.WsErrorController.noHost()
+GET     /errors/refused              controllers.WsErrorController.refused()
+GET     /errors/status/:code         controllers.WsErrorController.status(code: Int)
+GET     /errors/shape                controllers.WsErrorController.shape()
+GET     /errors/fallback             controllers.WsErrorController.fallback()
+GET     /errors/dashboard/:id        controllers.WsErrorController.dashboard(id: Int)
