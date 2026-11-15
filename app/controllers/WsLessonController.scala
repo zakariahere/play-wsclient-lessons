@@ -43,7 +43,6 @@ class WsLessonController @Inject()(ws: WSClient,
       }
   }
 
-
   def todosForUser(userId: Int): Action[AnyContent] = Action.async {
     ws.url(s"$baseUrl/todos").addQueryStringParameters(
       "userId" -> userId.toString,

@@ -7,3 +7,9 @@ GET     /json/as/:id                 controllers.WsJsonController.todoAs(id: Int
 GET     /json/todo/:id               controllers.WsJsonController.todoValidate(id: Int)
 GET     /json/user/:userId/stats     controllers.WsJsonController.userStats(userId: Int)
 GET     /json/user/:id               controllers.WsJsonController.userSummary(id: Int)
+
+POST    /write/posts                 controllers.WsWriteController.createPost()
+PUT     /write/posts/:id             controllers.WsWriteController.replacePost(id: Int)
+PATCH   /write/posts/:id/title       controllers.WsWriteController.patchTitle(id: Int)
+DELETE  /write/posts/:id             controllers.WsWriteController.deletePost(id: Int)
+POST    /write/form                  controllers.WsWriteController.formDemo()
