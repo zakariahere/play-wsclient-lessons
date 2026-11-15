@@ -22,3 +22,10 @@ GET     /errors/status/:code         controllers.WsErrorController.status(code: 
 GET     /errors/shape                controllers.WsErrorController.shape()
 GET     /errors/fallback             controllers.WsErrorController.fallback()
 GET     /errors/dashboard/:id        controllers.WsErrorController.dashboard(id: Int)
+
+GET     /par/sequential              controllers.ParallelController.sequential()
+GET     /par/parallel                controllers.ParallelController.parallel()
+GET     /par/profile/:id             controllers.ParallelController.profile(id: Int)
+GET     /par/many                    controllers.ParallelController.many(ids: String)
+GET     /par/all                     controllers.ParallelController.allOrNothing(ids: String)
+GET     /par/batched                 controllers.ParallelController.batched(n: Int ?= 20, size: Int ?= 5)
