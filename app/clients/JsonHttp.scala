@@ -4,20 +4,29 @@ import models.UpstreamError
 import models.UpstreamError._
 import play.api.http.Status._
 import play.api.libs.json._
-import play.api.libs.ws.WSClient
+import play.api.libs.ws.{WSClient, WSRequest}
 
 import java.net.{ConnectException, UnknownHostException}
 import java.util.concurrent.TimeoutException
 import scala.concurrent.ExecutionContext
-import scala.concurrent.duration._
 import scala.util.control.NonFatal
 
-abstract class JsonHttp(ws: WSClient)(implicit ec: ExecutionContext) {
+abstract class JsonHttp(ws: WSClient, val upstream: UpstreamConfig)(implicit ec: ExecutionContext) {
 
-  protected def getJson[A: Reads](url: String, timeout: FiniteDuration = 5.seconds): Upstream[A] =
-    ws.url(url)
-      .withRequestTimeout(timeout)
-      .get()
+  private val logging = new LoggingFilter(upstream.name)
+
+  // Every request of this client goes through here: base URL, timeout, auth header, logging filter
+  protected def request(path: String): WSRequest = {
+    val base = ws.url(upstream.baseUrl + path)
+      .withRequestTimeout(upstream.timeout)
+      .withRequestFilter(logging)
+
+    upstream.apiKey.fold(base)(key => base.addHttpHeaders("X-Api-Key" -> key))
+  }
+
+  protected def getJson[A: Reads](path: String): Upstream[A] = {
+    val req = request(path)
+    req.get()
       .map[Either[UpstreamError, A]] { r =>
         r.status match {
           case OK =>
@@ -25,14 +34,15 @@ abstract class JsonHttp(ws: WSClient)(implicit ec: ExecutionContext) {
               case JsSuccess(a, _) => Right(a)
               case e: JsError      => Left(BadShape(JsError.toJson(e)))
             }
-          case NOT_FOUND => Left(Missing(url))
+          case NOT_FOUND => Left(Missing(req.url))
           case other     => Left(BadStatus(other, r.body.take(200)))
         }
       }
       .recover {
-        case _: TimeoutException     => Left(TimedOut(url))
-        case e: ConnectException     => Left(Unreachable(url, s"connect: ${e.getMessage}"))
-        case e: UnknownHostException => Left(Unreachable(url, s"dns: ${e.getMessage}"))
-        case NonFatal(e)             => Left(Unreachable(url, s"${e.getClass.getSimpleName}: ${e.getMessage}"))
+        case _: TimeoutException     => Left(TimedOut(req.url))
+        case e: ConnectException     => Left(Unreachable(req.url, s"connect: ${e.getMessage}"))
+        case e: UnknownHostException => Left(Unreachable(req.url, s"dns: ${e.getMessage}"))
+        case NonFatal(e)             => Left(Unreachable(req.url, s"${e.getClass.getSimpleName}: ${e.getMessage}"))
       }
+  }
 }

@@ -29,3 +29,6 @@ GET     /par/profile/:id             controllers.ParallelController.profile(id: 
 GET     /par/many                    controllers.ParallelController.many(ids: String)
 GET     /par/all                     controllers.ParallelController.allOrNothing(ids: String)
 GET     /par/batched                 controllers.ParallelController.batched(n: Int ?= 20, size: Int ?= 5)
+
+GET     /cfg/settings                controllers.ConfigDemoController.settings()
+GET     /cfg/headers                 controllers.ConfigDemoController.headers()
