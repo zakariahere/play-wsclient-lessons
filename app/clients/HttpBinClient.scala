@@ -9,7 +9,7 @@ import scala.concurrent.ExecutionContext
 
 @Singleton
 class HttpBinClient @Inject()(ws: WSClient, config: Configuration)(implicit ec: ExecutionContext)
-  extends JsonHttp(ws, UpstreamConfig.load(config, "httpbin")) {
+  extends JsonHttp(ws, UpstreamConfig.load(config, "httpbin")) with HttpBinApi {
 
   def delay(seconds: Int): Upstream[JsValue] = getJson[JsValue](s"/delay/$seconds")
 

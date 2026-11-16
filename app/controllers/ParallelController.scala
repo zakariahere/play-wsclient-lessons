@@ -2,7 +2,7 @@ package controllers
 
 import cats.data.EitherT
 import cats.syntax.all._
-import clients.{HttpBinClient, JsonPlaceholderClient}
+import clients.{HttpBinApi, TodoApi}
 import controllers.UpstreamErrorResults.toResult
 import jakarta.inject.{Inject, Singleton}
 import play.api.libs.json._
@@ -11,8 +11,8 @@ import play.api.mvc._
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ParallelController @Inject()(jp: JsonPlaceholderClient,
-                                   bin: HttpBinClient,
+class ParallelController @Inject()(jp: TodoApi,
+                                   bin: HttpBinApi,
                                    val controllerComponents: ControllerComponents)
                                   (implicit ec: ExecutionContext) extends BaseController {
 

@@ -9,7 +9,7 @@ import scala.concurrent.ExecutionContext
 
 @Singleton
 class JsonPlaceholderClient @Inject()(ws: WSClient, config: Configuration)(implicit ec: ExecutionContext)
-  extends JsonHttp(ws, UpstreamConfig.load(config, "jsonplaceholder")) {
+  extends JsonHttp(ws, UpstreamConfig.load(config, "jsonplaceholder")) with TodoApi {
 
   def todo(id: Int): Upstream[Todo]              = getJson[Todo](s"/todos/$id")
   def user(id: Int): Upstream[UserSummary]       = getJson[UserSummary](s"/users/$id")
